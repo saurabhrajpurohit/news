@@ -18,8 +18,10 @@ function App() {
     setLoading(true);
     getData(topic).then(response => {
       setLoading(false);
-      setNews(response.articles);
-      setFilteredNews(response.articles);
+      if(response.articles) {
+        setNews(response.articles);
+        setFilteredNews(response.articles);
+      }
     }).catch(error => {
       console.error(error);
       setLoading(false);
@@ -80,7 +82,9 @@ function App() {
           {loading ? (
             <div className="loader">Fetching {topic} news...</div>
           ) : (
-            <NewsList news={filteredNews} />
+            filteredNews.length 
+              ? <NewsList news={filteredNews} /> 
+              : <div className="loader">No News Found</div>
           )}
         </div>
         <CategoryModal open={categoryModal} onSubmit={(submit: boolean, data?: Category) => categorySubmit(submit, data)} />
